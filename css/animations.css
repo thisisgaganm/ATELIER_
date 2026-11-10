@@ -1,0 +1,371 @@
+
+/* =================================
+   ANIMATION FOUNDATION
+================================= */
+
+.page-loader {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: var(--color-dark);
+    color: var(--color-ivory);
+
+    display: grid;
+    place-items: center;
+}
+
+.loader-content {
+    text-align: center;
+    width: 200px;
+}
+
+.loader-logo {
+    font-family: var(--font-heading);
+    font-size: 30px;
+    letter-spacing: 4px;
+}
+
+.loader-line {
+    width: 100%;
+    height: 2px;
+    background: var(--color-gold);
+    margin-top: 20px;
+    transform-origin: left;
+    animation: loaderProgress 1.5s ease forwards;
+}
+
+@keyframes loaderProgress {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+}
+
+/* CUSTOM CURSOR */
+
+.custom-cursor {
+    position: fixed;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-gold);
+    pointer-events: none;
+    z-index: 10001;
+    display: none;
+}
+
+.cursor-follower {
+    position: fixed;
+    width: 35px;
+    height: 35px;
+    border: 1px solid var(--color-gold);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 10000;
+    display: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    body {
+        cursor: none;
+    }
+
+    a, button {
+        cursor: none;
+    }
+
+    .custom-cursor,
+    .cursor-follower {
+        display: block;
+    }
+}
+
+/* =========================================
+   STEP 04 — HERO ENTRANCE ANIMATIONS
+========================================= */
+
+@keyframes heroImageReveal {
+    from {
+        transform: scale(1.14);
+        filter: brightness(.7);
+    }
+
+    to {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+}
+
+@keyframes heroTextReveal {
+    from {
+        opacity: 0;
+        transform: translateY(105%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes heroFadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes scrollLine {
+    0% {
+        transform: scaleY(.25);
+        transform-origin: top;
+        opacity: .4;
+    }
+
+    50% {
+        transform: scaleY(1);
+        transform-origin: top;
+        opacity: 1;
+    }
+
+    100% {
+        transform: scaleY(.25);
+        transform-origin: bottom;
+        opacity: .4;
+    }
+}
+
+/* Accessibility */
+
+@media (prefers-reduced-motion: reduce) {
+    .hero-image,
+    .hero-eyebrow,
+    .hero-title-line,
+    .hero-description,
+    .hero-actions,
+    .hero-bottom,
+    .hero-scroll-line {
+        animation: none !important;
+    }
+
+    .hero-image {
+        transform: none;
+    }
+}
+
+/* =========================================
+   STEP 11 — CINEMATIC MOTION & INTERACTIONS
+========================================= */
+
+/* Native pointer stays available unless the custom cursor is initialized. */
+@media (hover: hover) and (pointer: fine) {
+    body,
+    a,
+    button {
+        cursor: auto;
+    }
+
+    body.has-custom-cursor,
+    body.has-custom-cursor a,
+    body.has-custom-cursor button {
+        cursor: none;
+    }
+
+    .has-custom-cursor input:not([type="checkbox"]),
+    .has-custom-cursor textarea {
+        cursor: text !important;
+    }
+
+    .has-custom-cursor select,
+    .has-custom-cursor input[type="checkbox"] {
+        cursor: pointer !important;
+    }
+
+    .has-custom-cursor .custom-cursor,
+    .has-custom-cursor .cursor-follower {
+        display: block;
+        opacity: 0;
+        transition:
+            opacity .25s ease,
+            width .35s var(--ease-luxury),
+            height .35s var(--ease-luxury),
+            border-color .35s ease,
+            background-color .35s ease;
+    }
+
+    .has-custom-cursor.cursor-active .custom-cursor,
+    .has-custom-cursor.cursor-active .cursor-follower {
+        opacity: 1;
+    }
+}
+
+.custom-cursor,
+.cursor-follower {
+    pointer-events: none;
+    will-change: transform;
+}
+
+.custom-cursor {
+    z-index: 10001;
+}
+
+.cursor-follower {
+    z-index: 10000;
+    display: grid;
+    place-items: center;
+    background: transparent;
+}
+
+.cursor-follower::after {
+    content: "VIEW";
+    color: var(--color-dark);
+    font-size: 8px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    opacity: 0;
+    transform: scale(.85);
+    transition: opacity .25s ease, transform .25s ease;
+}
+
+.cursor-follower.is-expanded {
+    width: 52px;
+    height: 52px;
+    background: rgba(180, 154, 112, .12);
+}
+
+.cursor-follower.has-label {
+    width: 70px;
+    height: 70px;
+    background: var(--color-gold);
+}
+
+.cursor-follower.has-label::after {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.page-loader {
+    animation: loaderSafetyDismiss 1ms 3s forwards;
+    transition: opacity .65s var(--ease-luxury), visibility .65s ease;
+}
+
+.loader-logo {
+    animation: loaderLogoEnter .8s var(--ease-luxury) both;
+}
+
+.loader-line {
+    animation: loaderProgress 1.35s var(--ease-luxury) .15s both;
+}
+
+.page-loader.is-dismissing {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+@keyframes loaderLogoEnter {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+        letter-spacing: 8px;
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+        letter-spacing: 4px;
+    }
+}
+
+@keyframes loaderSafetyDismiss {
+    to {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+    }
+}
+
+.hero-background {
+    inset: -4% 0;
+}
+
+.motion-gsap.js .reveal-about,
+.motion-gsap.js .reveal-about.is-visible {
+    transition: none;
+}
+
+.nav-cta,
+.hero-button,
+.services-cta,
+.referral-button,
+.contact-submit,
+.location-directions,
+.service-card,
+.offer-card,
+.gallery-image-button {
+    -webkit-tap-highlight-color: transparent;
+}
+
+.nav-cta:hover,
+.services-cta:hover,
+.referral-button:hover,
+.contact-submit:hover,
+.location-directions:hover {
+    box-shadow: 0 8px 24px rgba(23, 23, 20, .12);
+}
+
+.contact-detail,
+.location-banner a,
+.gallery-footer a {
+    transition: color .3s ease, border-color .3s ease;
+}
+
+.contact-detail:hover,
+.location-banner a:hover,
+.gallery-footer a:hover {
+    color: var(--color-gold-dark);
+}
+
+.hero-button:focus-visible,
+.services-cta:focus-visible,
+.referral-button:focus-visible,
+.contact-submit:focus-visible,
+.location-directions:focus-visible,
+.gallery-filter:focus-visible,
+.gallery-image-button:focus-visible {
+    outline: 2px solid var(--color-gold-dark);
+    outline-offset: 4px;
+}
+
+@media (max-width: 768px) {
+    body,
+    a,
+    button {
+        cursor: auto !important;
+    }
+
+    .custom-cursor,
+    .cursor-follower {
+        display: none !important;
+    }
+
+    .hero-background {
+        inset: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .page-loader {
+        animation-delay: 0s;
+    }
+
+    .page-loader,
+    .loader-logo,
+    .loader-line {
+        transition-duration: .01ms !important;
+        animation-duration: .01ms !important;
+        animation-delay: 0s !important;
+    }
+}
